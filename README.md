@@ -54,7 +54,7 @@ do
 	curl https://localhost:4757
 	if (($? != 0))
 	then
-		date >> curl.log
+		date > curl.log
 	fi
 done
 ```
@@ -67,7 +67,7 @@ do
 	curl https://localhost:4757
 	if (($? != 0)) если 1 не равно 0
 	then
-		date >> curl.log
+		date > curl.log
 	fi
 done
 ```
@@ -81,16 +81,16 @@ done
 ### Ваш скрипт:
 ```bash
 #!/bin/bash
-while ((i==5)) числа равны
+hosts=(192.168.0.1 173.194.222.113 87.250.250.242)
+
+for i in {1..5}
 do
-	nmap -p 80 192.168.0.1 
-        nmap -p 80 173.194.222.113 
-        nmap -p 80 87.250.250.242         
-        let 'i+=1'
-	if ((i == 5)) 
-	then
-		cat >> ping.log
-	fi
+
+    for h in ${hosts[@]}
+    do
+	curl -Is $h:80 | head -n 1
+        echo "$h is up" >>ping.log
+    done
 done
 ```
 
@@ -101,7 +101,22 @@ done
 
 ### Ваш скрипт:
 ```bash
-???
+hosts=(192.168.0.1 173.194.222.113 87.250.250.242)
+dost=0
+
+while (${hosts[@]})
+do
+
+    for h in ${hosts[@]}
+    do
+	curl -Is $h:80 | head -n 1
+dost=$?
+if ((dost != 0))
+then
+        echo "Error $h " >>ping.log
+fi
+    done
+done
 ```
 
 ---
